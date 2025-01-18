@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:SnakeGame"
+             x:Class="SnakeGame.MainPage"
+             Background="#211E2B"
+             >
+
+    <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height ="Auto"/>
+                <RowDefinition Height ="*"/>
+            </Grid.RowDefinitions>
+        <StackLayout>
+
+            <Label x:Name="ScoreText" 
+                HorizontalTextAlignment="Center"
+                VerticalTextAlignment="Center"
+                Text="SCORE: 0"
+                FontSize="22"
+                Margin="10"/>
+            <Grid>
+                <Border x:Name="GridBorder"
+                    Grid.Row="1"
+                    Stroke="#4F4867"
+                    StrokeThickness="1.5"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center">
+                    <Grid x:Name="GameGrid"
+                        WidthRequest="400"
+                        HeightRequest="400"
+                        BackgroundColor="#312C40">
+                    </Grid>
+                </Border>
+                <Border x:Name="Overlay"
+                    Grid.Row="1"
+                    Background="#7F000000"
+                    StrokeThickness="0">
+                    <Label x:Name="OverlayText"
+                        Text="Press Start Button To Play"
+                        FontSize="24"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center"
+                        >
+                    </Label>
+                    
+                </Border>
+            </Grid>
+
+            <Button x:Name="StartBtn" Clicked="GameStared" WidthRequest="100" Margin="40" Text="Start"></Button>
+
+            <Grid WidthRequest="140" HeightRequest="140" HorizontalOptions="Center">
+                <Button x:Name="UpBtn" Clicked="UpBtnButtonClicked" BackgroundColor="#FF5EDA5E" VerticalOptions="Start" HorizontalOptions="Center" />
+                <Button x:Name="LeftBtn" Clicked="LeftBtnButtonClicked" BackgroundColor="#FF5EDA5E" VerticalOptions="Center" HorizontalOptions="Start"/>
+                <Button x:Name="RightBtn" Clicked="RightBtnButtonClicked" BackgroundColor="#FF5EDA5E" VerticalOptions="Center" HorizontalOptions="End"/>
+                <Button x:Name="DownBtn" Clicked="DownBtnButtonClicked" BackgroundColor="#FF5EDA5E" VerticalOptions="End" HorizontalOptions="Center"/>
+            </Grid>
+        </StackLayout>
+
+    </Grid>
+</ContentPage>
