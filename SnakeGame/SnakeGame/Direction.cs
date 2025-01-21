@@ -1,3 +1,4 @@
+
 namespace SnakeGame;
 
 public class Direction
@@ -22,8 +23,8 @@ public class Direction
     public override bool Equals(object? obj)
     {
         return obj is Direction direction &&
-            RowOffset == direction.RowOffset &&
-            ColumnOffset == direction.ColumnOffset;
+               RowOffset == direction.RowOffset &&
+               ColumnOffset == direction.ColumnOffset;
     }
 
     public override int GetHashCode()

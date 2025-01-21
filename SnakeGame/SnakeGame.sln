@@ -5,18 +5,24 @@ VisualStudioVersion = 17.0.31903.59
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeGame", "SnakeGame\SnakeGame.csproj", "{DBC1BC2B-F72E-4507-87FC-E6929B16418B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SnakeGameTests2", "SnakeGameTests2\SnakeGameTests2.csproj", "{0DCF4B82-3FAD-4904-A2DB-E6F2D9130085}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{DBC1BC2B-F72E-4507-87FC-E6929B16418B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DBC1BC2B-F72E-4507-87FC-E6929B16418B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DBC1BC2B-F72E-4507-87FC-E6929B16418B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DBC1BC2B-F72E-4507-87FC-E6929B16418B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0DCF4B82-3FAD-4904-A2DB-E6F2D9130085}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0DCF4B82-3FAD-4904-A2DB-E6F2D9130085}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0DCF4B82-3FAD-4904-A2DB-E6F2D9130085}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0DCF4B82-3FAD-4904-A2DB-E6F2D9130085}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 EndGlobal

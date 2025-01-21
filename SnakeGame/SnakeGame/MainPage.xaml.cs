@@ -17,7 +17,7 @@ public partial class MainPage : ContentPage
 		{GridValue.Snake, Color.FromHex("FF00FF66")},
 		{GridValue.Food, Color.FromHex("FFDD270F")}
 	};
-	private readonly int rows = 15, cols =15;
+	private readonly int rows =15, cols =15;
 	private GameState gameState;
 	private bool gameRunning;
 
@@ -44,39 +44,51 @@ public partial class MainPage : ContentPage
 		gameState.ChangeDirection(Direction.Down); 
 	}
 
-	// protected override async void OnAppearing(){
-	// 	base.OnAppearing();
-	// 	if (_keyboardHook is null)
-	// 		{
-	// 			_keyboardHook = new SimpleReactiveGlobalHook(GlobalHookType.Keyboard, runAsyncOnBackgroundThread: true);
+	protected override async void OnAppearing()
+	{
+		base.OnAppearing();
+		if (_keyboardHook is null)
+		{
+			_keyboardHook = new SimpleReactiveGlobalHook(GlobalHookType.Keyboard, runAsyncOnBackgroundThread: true);
 
-	// 			// Subscribe to all key presses
-	// 			_keyboardHook.KeyPressed.Subscribe(KeyDown);
+			// Subscribe to all key presses
+			_keyboardHook.KeyPressed.Subscribe(KeyDown);
 
-	// 			await _keyboardHook.RunAsync();
-	// 		}
-	// }
+			await _keyboardHook.RunAsync();
+		}
+	}
 
-	// private void KeyDown(KeyboardHookEventArgs args){
-	// 	if(gameState.GameOver){
-	// 		return;
-	// 	}
-
-	// 	switch(args.Data.KeyCode){
-	// 		case KeyCode.VcW:
-	// 			gameState.ChangeDirection(Direction.Up); 
-	// 			return;
-	// 		case KeyCode.VcS:
-	// 			gameState.ChangeDirection(Direction.Down); 
-	// 			return;
-	// 		case KeyCode.VcD:
-	// 			gameState.ChangeDirection(Direction.Right); 
-	// 			return;
-	// 		case KeyCode.VcA:
-	// 			gameState.ChangeDirection(Direction.Left); 
-	// 			return;
-	// 	}
-	// }
+	private void KeyDown(KeyboardHookEventArgs args)
+	{
+		if (!gameRunning)
+		{
+			switch (args.Data.KeyCode)
+			{
+				case KeyCode.VcW:
+					OverlayText.Text = "123";
+					return;
+			}
+		}
+		if (gameState.GameOver)
+		{
+			return;
+		}
+		switch (args.Data.KeyCode)
+			{
+			case KeyCode.VcW:
+				gameState.ChangeDirection(Direction.Up);
+				return;
+			case KeyCode.VcS:
+				gameState.ChangeDirection(Direction.Down);
+				return;
+			case KeyCode.VcD:
+				gameState.ChangeDirection(Direction.Right);
+				return;
+			case KeyCode.VcA:
+				gameState.ChangeDirection(Direction.Left);
+				return;
+			}
+		}
 
 
 	private async Task RunGame(){
@@ -108,12 +120,12 @@ public partial class MainPage : ContentPage
 		for(int r = 0; r < rows; r++){
 			GameGrid.RowDefinitions.Add(new RowDefinition{ Height = GridLength.Star });
 			for(int c = 0; c < cols; c++){
-				GameGrid.ColumnDefinitions.Add(new ColumnDefinition{ Width = 26.7 });
+				GameGrid.ColumnDefinitions.Add(new ColumnDefinition{ Width = 40 });
 				var rectangle = new Rectangle{Fill=Color.FromHex("312C40"), 
 													Stroke=Color.FromHex("4F4867"), 
 													StrokeThickness=3, 
-													WidthRequest=26.6, 
-													HeightRequest=26.6,
+													WidthRequest=39.9, 
+													HeightRequest=39.9,
 													};
 				Grid.SetRow(rectangle, r);
 				Grid.SetColumn(rectangle, c);
@@ -148,7 +160,7 @@ public partial class MainPage : ContentPage
 	private async Task ShowGameOver(){
 		await Task.Delay(1000);
 		Overlay.IsVisible = true;
-		OverlayText.Text = "Press Start Button To Play";
+		OverlayText.Text = "Press start to play";
 	}
 
 }

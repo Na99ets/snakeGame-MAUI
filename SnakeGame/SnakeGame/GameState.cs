@@ -30,7 +30,7 @@ public class GameState
     private void AddSnake(){
         int rowStartPosition = Rows / 2;
 
-        for(int colStartPosition  = 1; colStartPosition <= 3; colStartPosition++){
+        for(int colStartPosition  = 1; colStartPosition <= 5; colStartPosition++){
             Grid[rowStartPosition, colStartPosition] = GridValue.Snake;
             snakePosition.AddFirst(new Position(rowStartPosition, colStartPosition));
         }
