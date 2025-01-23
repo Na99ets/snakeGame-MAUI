@@ -1,5 +1,5 @@
-﻿using Microsoft.Maui.Controls.Shapes;
-namespace SnakeGame;
+﻿namespace SnakeGame;
+using Microsoft.Maui.Controls.Shapes;
 using SharpHook.Native;
 using SharpHook.Reactive;
 using SharpHook;
@@ -9,17 +9,15 @@ using System.Reactive.Linq;
 
 
 public partial class MainPage : ContentPage
-{
+{	
 	
 
-	private readonly Dictionary<GridValue, Color> gridValueToColor = new Dictionary<GridValue, Color>{
-		{GridValue.Empty, Color.FromHex("312C40")},
-		{GridValue.Snake, Color.FromHex("FF00FF66")},
-		{GridValue.Food, Color.FromHex("FFDD270F")}
-	};
-	private readonly int rows = 15, cols =15;
-	private GameState gameState;
+
+	private int rows = 20, cols = 10;
+	private Tetris tetris;
+	private Snake snake;
 	private bool gameRunning;
+	private List<string> gameNamesList = new List<string>{"Start Snake", "Start Tetres"};
 
 	IReactiveGlobalHook _keyboardHook;
 
@@ -27,129 +25,87 @@ public partial class MainPage : ContentPage
 	public MainPage()
 	{
 		InitializeComponent();
-		SetupGrid();
-		gameState = new GameState(rows, cols);
+		snake = new Snake(rows, cols, GameGrid, Overlay, OverlayText, ScoreText);
+		tetris = snake.tetris;
+		snake.drawGrid.SetupGrid();
 	}
 
-	private void UpBtnButtonClicked(object sender, EventArgs e){
-		gameState.ChangeDirection(Direction.Up); 
+	protected override async void OnAppearing(){
+		base.OnAppearing();
+		if (_keyboardHook is null)
+			{
+				_keyboardHook = new SimpleReactiveGlobalHook(GlobalHookType.Keyboard, runAsyncOnBackgroundThread: true);
+
+				// Subscribe to all key presses
+				_keyboardHook.KeyPressed.Subscribe(KeyDown);
+
+				await _keyboardHook.RunAsync();
+			}
 	}
-	private void LeftBtnButtonClicked(object sender, EventArgs e){
-		gameState.ChangeDirection(Direction.Left); 
+
+	private async void KeyDown(KeyboardHookEventArgs args){
+        MainThread.InvokeOnMainThreadAsync(() =>
+        {
+            if (snake.curentGame == Games.GameTetris)
+            {
+                if (snake.tetris.GameOver)
+                {
+                    return;
+                }
+
+                switch (args.Data.KeyCode)
+                {
+					case KeyCode.VcSpace:
+						snake.tetris.RotateTetris();
+						return;
+                    case KeyCode.VcD:
+                    case KeyCode.VcRight:
+                        snake.tetris.MoveTetris(Direction.Right);
+                        return;
+                    case KeyCode.VcA:
+                    case KeyCode.VcLeft:
+                        snake.tetris.MoveTetris(Direction.Left);
+                        return;
+                }
+            }
+        });
+
+		if(snake.curentGame == Games.GameSnake){
+			switch(args.Data.KeyCode){
+				case KeyCode.VcW:
+				case KeyCode.VcUp:
+					snake.ChangeDirection(Direction.Up);
+					return;
+				case KeyCode.VcS:
+				case KeyCode.VcDown:
+					snake.ChangeDirection(Direction.Down); 
+					return;
+				case KeyCode.VcD:
+				case KeyCode.VcRight:
+					snake.ChangeDirection(Direction.Right); 
+					return;
+				case KeyCode.VcA:
+				case KeyCode.VcLeft:
+					snake.ChangeDirection(Direction.Left); 
+					return;
+			}
+		}
 	}
-	private void RightBtnButtonClicked(object sender, EventArgs e){
-		gameState.ChangeDirection(Direction.Right); 
-	}
-	private void DownBtnButtonClicked(object sender, EventArgs e){
-		gameState.ChangeDirection(Direction.Down); 
-	}
-
-	// protected override async void OnAppearing(){
-	// 	base.OnAppearing();
-	// 	if (_keyboardHook is null)
-	// 		{
-	// 			_keyboardHook = new SimpleReactiveGlobalHook(GlobalHookType.Keyboard, runAsyncOnBackgroundThread: true);
-
-	// 			// Subscribe to all key presses
-	// 			_keyboardHook.KeyPressed.Subscribe(KeyDown);
-
-	// 			await _keyboardHook.RunAsync();
-	// 		}
-	// }
-
-	// private void KeyDown(KeyboardHookEventArgs args){
-	// 	if(gameState.GameOver){
-	// 		return;
-	// 	}
-
-	// 	switch(args.Data.KeyCode){
-	// 		case KeyCode.VcW:
-	// 			gameState.ChangeDirection(Direction.Up); 
-	// 			return;
-	// 		case KeyCode.VcS:
-	// 			gameState.ChangeDirection(Direction.Down); 
-	// 			return;
-	// 		case KeyCode.VcD:
-	// 			gameState.ChangeDirection(Direction.Right); 
-	// 			return;
-	// 		case KeyCode.VcA:
-	// 			gameState.ChangeDirection(Direction.Left); 
-	// 			return;
-	// 	}
-	// }
 
 
-	private async Task RunGame(){
-		Draw();
-		await ShowCountDown();
-		Overlay.IsVisible = false;
-		await GameLoop();
-		await ShowGameOver();
-		gameState = new GameState(rows, cols);
-	}
+
 
 	private async void GameStared(object sender, EventArgs e){
+		snake = new Snake(rows, cols, GameGrid, Overlay, OverlayText, ScoreText);
+		tetris = snake.tetris;
 		if(!gameRunning){
 			gameRunning = true;
-			await RunGame();
+			await snake.RunGame();
 			gameRunning = false;
+			OverlayText.Text = "Press start";
 		}
 	}
 
-	private async Task GameLoop(){
-		while(!gameState.GameOver){
-			await Task.Delay(100);
-			gameState.MoveSnake();
-			Draw();
-		}
-	}
-
-	private void SetupGrid(){
-		for(int r = 0; r < rows; r++){
-			GameGrid.RowDefinitions.Add(new RowDefinition{ Height = GridLength.Star });
-			for(int c = 0; c < cols; c++){
-				GameGrid.ColumnDefinitions.Add(new ColumnDefinition{ Width = 26.7 });
-				var rectangle = new Rectangle{Fill=Color.FromHex("312C40"), 
-													Stroke=Color.FromHex("4F4867"), 
-													StrokeThickness=3, 
-													WidthRequest=26.6, 
-													HeightRequest=26.6,
-													};
-				Grid.SetRow(rectangle, r);
-				Grid.SetColumn(rectangle, c);
-				GameGrid.Children.Add(rectangle);
-			}
-		}
-	}
-
-	private void Draw(){
-		DrowGrid();
-		ScoreText.Text = $"SCORE: {gameState.Score}";
-	}
-
-	private void DrowGrid(){
-		foreach(var child in GameGrid.Children){
-			if(child is Rectangle rectangle){
-				int row = Grid.GetRow(rectangle);
-				int col = Grid.GetColumn(rectangle);
-				GridValue gridValue = gameState.Grid[row,col];
-				rectangle.Fill = gridValueToColor[gridValue];
-			}
-		}
-	}
-
-	private async Task ShowCountDown(){
-		for(int i = 3; i >= 1; i--){
-			OverlayText.Text = i.ToString();
-			await Task.Delay(500);
-		}
-	}
-
-	private async Task ShowGameOver(){
-		await Task.Delay(1000);
-		Overlay.IsVisible = true;
-		OverlayText.Text = "Press Start Button To Play";
-	}
 
 }
 

@@ -27,9 +27,10 @@
                     HorizontalOptions="Center"
                     VerticalOptions="Center">
                     <Grid x:Name="GameGrid"
-                        WidthRequest="400"
-                        HeightRequest="400"
-                        BackgroundColor="#312C40">
+                        WidthRequest="267"
+                        HeightRequest="533"
+                        BackgroundColor="#312C40"
+                        BindingContext="{Binding}">
                     </Grid>
                 </Border>
                 <Border x:Name="Overlay"
@@ -37,7 +38,7 @@
                     Background="#7F000000"
                     StrokeThickness="0">
                     <Label x:Name="OverlayText"
-                        Text="Press Start Button To Play"
+                        Text="Start Snake"
                         FontSize="24"
                         HorizontalOptions="Center"
                         VerticalOptions="Center"
@@ -48,13 +49,6 @@
             </Grid>
 
             <Button x:Name="StartBtn" Clicked="GameStared" WidthRequest="100" Margin="40" Text="Start"></Button>
-
-            <Grid WidthRequest="140" HeightRequest="140" HorizontalOptions="Center">
-                <Button x:Name="UpBtn" Clicked="UpBtnButtonClicked" BackgroundColor="#FF5EDA5E" VerticalOptions="Start" HorizontalOptions="Center" />
-                <Button x:Name="LeftBtn" Clicked="LeftBtnButtonClicked" BackgroundColor="#FF5EDA5E" VerticalOptions="Center" HorizontalOptions="Start"/>
-                <Button x:Name="RightBtn" Clicked="RightBtnButtonClicked" BackgroundColor="#FF5EDA5E" VerticalOptions="Center" HorizontalOptions="End"/>
-                <Button x:Name="DownBtn" Clicked="DownBtnButtonClicked" BackgroundColor="#FF5EDA5E" VerticalOptions="End" HorizontalOptions="Center"/>
-            </Grid>
         </StackLayout>
 
     </Grid>

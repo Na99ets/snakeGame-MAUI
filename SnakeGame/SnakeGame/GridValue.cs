@@ -3,6 +3,10 @@ public enum GridValue
 {
     Empty,
     Snake,
+    SnakeHead,
     Food,
-    Outside
+    ToTetrisFood,
+    Outside,
+    Tetris,
+    FallenTetris
 }
