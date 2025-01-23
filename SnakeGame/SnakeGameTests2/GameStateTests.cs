@@ -1,5 +1,4 @@
-﻿https://github.com/Na99ets/snakeGame-MAUI/tree/mainusing Microsoft.VisualStudio.TestTools.UnitTesting;
-using SnakeGame;
+﻿using SnakeGame;
 using System;
 using System.Collections.Generic;
 using System.Linq;
